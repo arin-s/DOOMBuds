@@ -1,0 +1,3 @@
+[submodule "apps/doom"]
+	path = apps/doom
+	url = https://github.com/arin-s/doom-serial.git
