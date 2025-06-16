@@ -114,7 +114,7 @@ AUDIO_RESAMPLE ?= 0
 
 RESAMPLE_ANY_SAMPLE_RATE ?= 1
 
-OSC_26M_X4_AUD2BB ?= 1
+OSC_26M_X4_AUD2BB ?= 0
 
 AUDIO_OUTPUT_VOLUME_DEFAULT ?= 12
 # range:1~16
@@ -255,7 +255,7 @@ FACTORY_MODE ?= 0
 
 ENGINEER_MODE ?= 0
 
-ULTRA_LOW_POWER	?= 1
+ULTRA_LOW_POWER	?= 0
 
 DAC_CLASSG_ENABLE ?= 1
 
@@ -367,7 +367,7 @@ AUDIO_BUFFER_SIZE := 100*1024
 endif
 
 export TRACE_BUF_SIZE := 16*1024
-export TRACE_BAUD_RATE := 2000000
+export TRACE_BAUD_RATE := 3000000
 
 init-y :=
 core-y := platform/ services/ apps/ utils/cqueue/ utils/list/ services/multimedia/ utils/intersyshci/

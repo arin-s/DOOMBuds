@@ -35,13 +35,6 @@
 #endif
 #endif
 
-#ifdef HWTEST
-#include "hwtest.h"
-#ifdef VD_TEST
-#include "voice_detector.h"
-#endif
-#endif
-
 #ifdef __cplusplus
 #define EXTERN_C extern "C"
 #else
@@ -113,12 +106,9 @@ int MAIN_ENTRY(void) {
 #endif
 #endif
 
-#if !defined(SIMU)
   uint8_t flash_id[HAL_NORFLASH_DEVICE_ID_LEN];
   hal_norflash_get_id(HAL_NORFLASH_ID_0, flash_id, ARRAY_SIZE(flash_id));
   TRACE(3, "FLASH_ID: %02X-%02X-%02X", flash_id[0], flash_id[1], flash_id[2]);
-#endif
-
   TRACE(1, TIME_STR " main started: filled@0x%08x", CUR_TIME, (uint32_t)bytes);
 
 #ifndef NO_PMU
@@ -126,86 +116,18 @@ int MAIN_ENTRY(void) {
   ASSERT(ret == 0, "Failed to open pmu");
 #endif
   analog_open();
-
   hal_cmu_simu_pass();
 
-#ifdef SIMU
-  hal_sw_bootmode_set(HAL_SW_BOOTMODE_FLASH_BOOT);
-  hal_cmu_sys_reboot();
-#else
-#ifdef SLEEP_TEST
-  hal_sleep_start_stats(10000, 10000);
-  hal_sysfreq_req(HAL_SYSFREQ_USER_INIT, HAL_CMU_FREQ_32K);
-#else
-  hal_sysfreq_req(HAL_SYSFREQ_USER_INIT, HAL_CMU_FREQ_104M);
-#endif
+  //------------------------------------------------------
+
+  // Enable high performance mode (300mhz)
+  pmu_high_performance_mode_enable(true);
+  hal_sysfreq_req(HAL_SYSFREQ_USER_INIT, HAL_CMU_FREQ_208M);
   TRACE(1, "CPU freq: %u", hal_sys_timer_calc_cpu_freq(5, 0));
-#endif
-
-#ifdef HWTEST
-
-#ifdef USB_SERIAL_TEST
-  pmu_usb_config(PMU_USB_CONFIG_TYPE_DEVICE);
-  usb_serial_test();
-#endif
-#ifdef USB_SERIAL_DIRECT_XFER_TEST
-  pmu_usb_config(PMU_USB_CONFIG_TYPE_DEVICE);
-  usb_serial_direct_xfer_test();
-#endif
-#ifdef USB_AUDIO_TEST
-  pmu_usb_config(PMU_USB_CONFIG_TYPE_DEVICE);
-  usb_audio_test();
-#endif
-#ifdef I2C_TEST
-  i2c_test();
-#endif
-#ifdef AF_TEST
-  af_test();
-#endif
-#ifdef VD_TEST
-  voice_detector_test();
-#endif
-#ifdef CP_TEST
-  cp_test();
-#endif
-#ifdef SEC_ENG_TEST
-  sec_eng_test();
-#endif
-#ifdef TDM_TEST
-  tdm_test();
-#endif
-#ifdef A7_DSP_TEST
-  a7_dsp_test();
-#endif
-#ifdef TRANSQ_TEST
-  transq_test();
-#endif
-#ifdef PSRAM_TEST
-  psram_test();
-#endif
-#ifdef PSRAMUHS_TEST
-  psramuhs_test();
-#endif
-
-  SAFE_PROGRAM_STOP();
-
-#endif // HWTEST
-
-#ifdef NO_TIMER
-  TRACE(0, TIME_STR " Enter sleep ...", CUR_TIME);
-#else
-  hw_timer = hwtimer_alloc(timer_handler, 0);
-  hwtimer_start(hw_timer, MS_TO_TICKS(TIMER_IRQ_PERIOD_MS));
-  TRACE(1, TIME_STR " Start timer %u ms", CUR_TIME, TIMER_IRQ_PERIOD_MS);
-#endif
 
   while (1) {
-#if defined(SLEEP_TEST) && !defined(RTOS)
-    hal_sleep_enter_sleep();
-#else
     osDelay(DELAY_PERIOD_MS);
     TRACE(1, TIME_STR " Delay %u ms done", CUR_TIME, DELAY_PERIOD_MS);
-#endif
   }
 
   SAFE_PROGRAM_STOP();
