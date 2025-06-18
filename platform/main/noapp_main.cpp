@@ -28,6 +28,8 @@
 #include "main_entry.h"
 #include "pmu.h"
 
+#include "serial.h"
+
 #ifdef RTOS
 #include "cmsis_os.h"
 #ifdef KERNEL_RTX
@@ -124,6 +126,8 @@ int MAIN_ENTRY(void) {
   pmu_high_performance_mode_enable(true);
   hal_sysfreq_req(HAL_SYSFREQ_USER_INIT, HAL_CMU_FREQ_208M);
   TRACE(1, "CPU freq: %u", hal_sys_timer_calc_cpu_freq(5, 0));
+
+  doom_main();
 
   while (1) {
     osDelay(DELAY_PERIOD_MS);
