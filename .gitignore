@@ -99,6 +99,8 @@ Release/
 /out/
 *.pre
 
+/working_area/
+
 # configuration file
 # *.ini
 log.txt
