@@ -453,7 +453,8 @@ export CHIP_HAS_SPDIF := 1
 export CHIP_HAS_TRANSQ := 0
 export CHIP_HAS_PSC := 1
 export CHIP_HAS_EXT_PMU := 1
-export CHIP_HAS_CP := 1
+# not anymore :)
+export CHIP_HAS_CP := 0
 export CHIP_HAS_AUDIO_CONST_ROM := 0
 export CHIP_FLASH_CTRL_VER := 2
 export CHIP_SPI_VER := 3
