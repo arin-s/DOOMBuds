@@ -253,10 +253,10 @@ endif
 ifeq ($(DOOMBUDS),1)
 
 
-C_SRC := $(shell find ../../apps/doom/src/DOOM -name '*.c' -type f)
+C_SRC := $(shell find ../../apps/doom/src/ -name '*.c' -type f)
 C_SRC += $(shell find ../../apps/doom/examples/SerialBuds -name '*.c' -type f)
 
-CPP_SRC := $(shell find ../../apps/doom/src/DOOM -name '*.cpp' -type f)
+CPP_SRC := $(shell find ../../apps/doom/src/ -name '*.cpp' -type f)
 CPP_SRC += $(shell find ../../apps/doom/examples/SerialBuds -name '*.cpp' -type f)
 
 obj-y += $(C_SRC:.c=.o)
@@ -274,18 +274,20 @@ platform/main/shareware.o: ../../apps/doom/doom1.wad
 
 #includes
 subdir-ccflags-y += -Iapps/doom/src/DOOM \
+					-Iapps/doom/src/common \
 					-Iapps/doom/thirdparty/JPEGENC/src \
-					-Iapps/doom/examples/SerialBuds
+					-Iapps/doom/examples/SerialBuds \
+					-Iutils/heap/
 
 #feature flags
 subdir-ccflags-y += \
-    -DDOOM_IMPLEMENT_PRINT \
     -DDOOM_IMPLEMENT_MALLOC \
-    -DDOOM_IMPLEMENT_FILE_IO \
-    -DDOOM_IMPLEMENT_GETTIME \
     -DDOOM_IMPLEMENT_EXIT \
 	-D__LINUX__ \
-	-DDOOMBUDS \
-    -DDOOM_IMPLEMENT_GETENV # remove later
+	-DDOOMBUDS
+	#-DDOOM_IMPLEMENT_PRINT
+	#-DDOOM_IMPLEMENT_FILE_IO
+	#-DDOOM_IMPLEMENT_GETTIME
+    #-DDOOM_IMPLEMENT_GETENV # remove later
 	# -DDOOM_IMPLEMENT_SOCKETS
 endif
