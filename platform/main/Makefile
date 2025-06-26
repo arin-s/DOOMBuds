@@ -251,43 +251,6 @@ endif
 
 #DOOM
 ifeq ($(DOOMBUDS),1)
-
-
-C_SRC := $(shell find ../../apps/doom/src/ -name '*.c' -type f)
-C_SRC += $(shell find ../../apps/doom/examples/SerialBuds -name '*.c' -type f)
-
-CPP_SRC := $(shell find ../../apps/doom/src/ -name '*.cpp' -type f)
-CPP_SRC += $(shell find ../../apps/doom/examples/SerialBuds -name '*.cpp' -type f)
-
-obj-y += $(C_SRC:.c=.o)
-obj-y += $(CPP_SRC:.cpp=.o)
-
-#jpegenc
-obj-y += ../../apps/doom/thirdparty/JPEGENC/src/JPEGENC.o
-
-#shareware wad
-obj-y += shareware.o
-platform/main/shareware.o: ../../apps/doom/doom1.wad
-	arm-none-eabi-ld -r -b binary ../../apps/doom/doom1.wad -o platform/main/shareware.tmp.o
-	arm-none-eabi-objcopy --rename-section .data=.rodata,alloc,load,readonly,data,contents platform/main/shareware.tmp.o platform/main/shareware.o
-	rm platform/main/shareware.tmp.o
-
-#includes
-subdir-ccflags-y += -Iapps/doom/src/DOOM \
-					-Iapps/doom/src/common \
-					-Iapps/doom/thirdparty/JPEGENC/src \
-					-Iapps/doom/examples/SerialBuds \
-					-Iutils/heap/
-
-#feature flags
-subdir-ccflags-y += \
-    -DDOOM_IMPLEMENT_EXIT \
-	-D__LINUX__ \
-	-DDOOMBUDS
-	#-DDOOM_IMPLEMENT_MALLOC
-	#-DDOOM_IMPLEMENT_PRINT
-	#-DDOOM_IMPLEMENT_FILE_IO
-	#-DDOOM_IMPLEMENT_GETTIME
-    #-DDOOM_IMPLEMENT_GETENV # remove later
-	# -DDOOM_IMPLEMENT_SOCKETS
+ccflags-y += -Iapps/doom/examples/SerialBuds \
+			 -DDOOMBUDS
 endif
