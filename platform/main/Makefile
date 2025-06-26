@@ -281,10 +281,10 @@ subdir-ccflags-y += -Iapps/doom/src/DOOM \
 
 #feature flags
 subdir-ccflags-y += \
-    -DDOOM_IMPLEMENT_MALLOC \
     -DDOOM_IMPLEMENT_EXIT \
 	-D__LINUX__ \
 	-DDOOMBUDS
+	#-DDOOM_IMPLEMENT_MALLOC
 	#-DDOOM_IMPLEMENT_PRINT
 	#-DDOOM_IMPLEMENT_FILE_IO
 	#-DDOOM_IMPLEMENT_GETTIME
